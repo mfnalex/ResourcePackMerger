@@ -61,8 +61,12 @@ public class Utils {
         map.forEach((key, value) -> ResourcePackMerger.getLogger().debug(key + " -> " + value));
     }
 
+    private static final String[] ENDINGS = {".json",".mcmeta"};
     public static boolean isJsonFile(File file) {
-        return file.getAbsolutePath().toLowerCase(Locale.ROOT).endsWith(".json");
+        for(String ending : ENDINGS) {
+            if(file.getAbsolutePath().toLowerCase(Locale.ROOT).endsWith(ending)) return true;
+        }
+        return false;
     }
 
     public static ArrayList<Image> getIcons() {
