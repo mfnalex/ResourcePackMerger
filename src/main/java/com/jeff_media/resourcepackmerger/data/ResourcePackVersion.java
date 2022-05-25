@@ -33,4 +33,11 @@ public enum ResourcePackVersion {
     public int getFormat() {
         return format;
     }
+
+    public static ResourcePackVersion byFormat(int format) {
+        for(ResourcePackVersion version : values()) {
+            if(version.format == format) return version;
+        }
+        throw new IllegalArgumentException();
+    }
 }

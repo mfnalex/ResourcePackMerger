@@ -22,7 +22,7 @@ public class DirectoryMerger {
 
     public boolean merge() {
         if(!outputFile.isDirectory() && !outputFile.mkdirs()) {
-            throw new RuntimeException("Could not create directory " + outputFile.getAbsolutePath());
+            throw new RuntimeException("[Error 2] Could not create directory " + outputFile.getAbsolutePath());
         }
         for(File directory : inputFiles) {
             //try {
@@ -70,9 +70,9 @@ public class DirectoryMerger {
             if(!outputFile.isDirectory()) {
                 throw new RuntimeException("Not a directory: " + outputFile.getAbsolutePath());
             }
-            if(!outputFile.mkdirs()) {
-                throw new RuntimeException("Could not create directory: " + outputFile.getAbsolutePath());
-            }
+            /*if(!outputFile.mkdirs()) {
+                throw new RuntimeException("[Error 3] Could not create directory: " + outputFile.getAbsolutePath());
+            }*/
             if(Objects.requireNonNull(outputFile.list()).length > 0) {
                 throw new RuntimeException("Directory is not empty: " + outputFile.getAbsolutePath());
             }
