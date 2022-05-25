@@ -1,5 +1,6 @@
 package com.jeff_media.resourcepackmerger;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import net.lingala.zip4j.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
 import net.lingala.zip4j.model.ZipParameters;
@@ -63,10 +64,12 @@ public class Utils {
 
     private static final String[] ENDINGS = {".json",".mcmeta"};
     public static boolean isJsonFile(File file) {
-        for(String ending : ENDINGS) {
-            if(file.getAbsolutePath().toLowerCase(Locale.ROOT).endsWith(ending)) return true;
+        try {
+            new ObjectMapper().readValue(file, Map.class);
+            return true;
+        } catch (Throwable t) {
+            return false;
         }
-        return false;
     }
 
     public static ArrayList<Image> getIcons() {
