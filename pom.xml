@@ -6,7 +6,7 @@
 
     <groupId>org.example</groupId>
     <artifactId>ResourcePackMerger</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.2.1</version>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -38,7 +38,7 @@
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>3.3.0</version>
                 <configuration>
-                    <minimizeJar>true</minimizeJar>
+                    <minimizeJar>false</minimizeJar>
                 </configuration>
                 <executions>
                     <execution>
@@ -87,6 +87,12 @@
             <groupId>com.miglayout</groupId>
             <artifactId>miglayout-swing</artifactId>
             <version>5.2</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.formdev</groupId>
+            <artifactId>flatlaf</artifactId>
+            <version>3.0</version>
             <scope>compile</scope>
         </dependency>
 

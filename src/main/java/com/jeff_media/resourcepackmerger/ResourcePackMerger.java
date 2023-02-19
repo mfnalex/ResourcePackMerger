@@ -1,10 +1,13 @@
 package com.jeff_media.resourcepackmerger;
 
+import com.formdev.flatlaf.FlatDarculaLaf;
+import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import com.jeff_media.resourcepackmerger.gui.GUI;
 import com.jeff_media.resourcepackmerger.logging.ConsoleLogger;
 import com.jeff_media.resourcepackmerger.logging.Logger;
 import com.jeff_media.resourcepackmerger.mergers.DirectoryMerger;
 
+import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
@@ -26,12 +29,21 @@ public class ResourcePackMerger {
     }
 
     public static void main(String[] args) {
+
+        try {
+            UIManager.setLookAndFeel(new FlatDarculaLaf());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+
         try {
             loadProperties();
         } catch (IOException e) {
             e.printStackTrace();
             return;
         }
+
 
         if (args.length == 0) {
             GUI gui = new GUI();

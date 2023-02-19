@@ -9,9 +9,7 @@ import net.lingala.zip4j.model.enums.CompressionLevel;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.Array;
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -74,9 +72,9 @@ public class Utils {
 
     public static ArrayList<Image> getIcons() {
         ArrayList<Image> list = new ArrayList<>();
-        for (String filename : new String[]{"logo_32_32.png", "logo_64_64.png"}) {
+        for (String filename : new String[]{"364","256","192","128","96","64","48","32","24","16"}) {
             try {
-                Image image = ImageIO.read(ResourcePackMerger.class.getResourceAsStream("/" + filename));
+                Image image = ImageIO.read(ResourcePackMerger.class.getResourceAsStream("/" + filename + ".png"));
                 list.add(image);
             } catch (IOException ignored) {
 
@@ -87,7 +85,7 @@ public class Utils {
 
     public static BufferedImage getLogo() {
         try {
-            BufferedImage picture = ImageIO.read(ResourcePackMerger.class.getResourceAsStream("/logo_64_64.png"));
+            BufferedImage picture = ImageIO.read(ResourcePackMerger.class.getResourceAsStream("/64.png"));
             return picture;
         } catch (IOException ignored) {
             throw new RuntimeException(ignored);
@@ -114,12 +112,14 @@ public class Utils {
         ZipParameters params = new ZipParameters();
         params.setIncludeRootFolder(false);
         params.setCompressionLevel(level);
-        ZipFile zip = new ZipFile(zipFile);
-        try {
+
+        try(ZipFile zip = new ZipFile(zipFile)) {
             zip.addFolder(inputFolder, params);
         } catch (ZipException e) {
             e.printStackTrace();
             return null;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
         return zipFile;
     }
@@ -132,5 +132,17 @@ public class Utils {
     public static String asFolderFileName(String text) {
         if(text.toLowerCase(Locale.ROOT).endsWith(".zip")) return text.substring(0,text.length() - ".zip".length());
         return text;
+    }
+
+    private static String version = null;
+    public static String getVersion() {
+        if(version != null) return version;
+        try(InputStreamReader reader = new InputStreamReader(ResourcePackMerger.class.getResourceAsStream("/version.txt"))) {
+            BufferedReader br = new BufferedReader(reader);
+            version = br.readLine();
+            return version;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
