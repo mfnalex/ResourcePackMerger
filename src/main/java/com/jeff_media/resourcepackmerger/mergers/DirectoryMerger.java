@@ -46,7 +46,7 @@ public class DirectoryMerger {
                                     ResourcePackMerger.getLogger().info("   |- File already exists, skipping");
                                 }
                             }
-                        }  (IOException e) {
+                        } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
                     }

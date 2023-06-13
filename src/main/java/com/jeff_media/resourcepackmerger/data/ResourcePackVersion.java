@@ -13,6 +13,7 @@ public enum ResourcePackVersion {
     MC_1_19_22w42a(11,"22w42a","22w44a"),
     MC_1_19_3(12, "22w45a", "1.19.3"),
     MC_1_19_4(13, "1.19.4", "1.19.4"),
+    MC_1_20_23w14a(14, "23w14a", "23w16a"),
     MC_1_20(15, "1.20", "1.20");
 
     private final int format;
