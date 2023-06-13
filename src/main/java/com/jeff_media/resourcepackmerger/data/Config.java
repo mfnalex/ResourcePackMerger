@@ -45,7 +45,7 @@ public class Config {
         this.description = "My Custom Resource Pack";
         this.outputFile = new File(System.getProperty("user.home"), "merged-resourcepack.zip").getAbsolutePath();
         this.resourcePackFiles = Collections.emptyList();
-        this.resourcePackVersion = ResourcePackVersion.MC_1_18;
+        this.resourcePackVersion = ResourcePackVersion.values()[ResourcePackVersion.values().length-1];
         this.compression = ZipCompression.NORMAL;
         this.isNewlyGenerated = true;
     }
