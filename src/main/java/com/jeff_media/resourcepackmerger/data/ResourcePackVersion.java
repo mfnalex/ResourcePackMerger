@@ -11,7 +11,8 @@ public enum ResourcePackVersion {
     MC_1_18(8,"1.18","1.18.2"),
     MC_1_19(9,"1.19","1.19.2"),
     MC_1_19_3(12, "1.19.3", "1.19.3"),
-    MC_1_19_4(13, "1.19.4", "1.19.4");
+    MC_1_19_4(13, "1.19.4", "1.19.4"),
+    MC_1_20(15, "1.20", "1.20");
 
     private final int format;
     private final String nameInMenu;
