@@ -76,7 +76,7 @@ public class Utils {
             try {
                 Image image = ImageIO.read(ResourcePackMerger.class.getResourceAsStream("/" + filename + ".png"));
                 list.add(image);
-            } catch (IOException ignored) {
+            }  (IOException ignored) {
 
             }
         }
@@ -87,7 +87,7 @@ public class Utils {
         try {
             BufferedImage picture = ImageIO.read(ResourcePackMerger.class.getResourceAsStream("/64.png"));
             return picture;
-        } catch (IOException ignored) {
+        }  (IOException ignored) {
             throw new RuntimeException(ignored);
         }
     }
