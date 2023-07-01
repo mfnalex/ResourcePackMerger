@@ -39,6 +39,7 @@ public class Utils {
             ZipFile zipFile = new ZipFile(file);
             zipFile.extractAll(temp.getAbsolutePath());
             temp.deleteOnExit();
+            //new File(temp, "pack.mcmeta").delete();
             return temp;
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -62,6 +63,7 @@ public class Utils {
 
     private static final String[] ENDINGS = {".json",".mcmeta"};
     public static boolean isJsonFile(File file) {
+        //if(file.getName().equals("pack.mcmeta")) return false;
         try {
             new ObjectMapper().readValue(file, Map.class);
             return true;

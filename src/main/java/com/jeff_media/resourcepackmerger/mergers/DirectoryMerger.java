@@ -41,7 +41,12 @@ public class DirectoryMerger {
                             } else {
                                 if(Utils.isJsonFile(newFile)) {
                                     ResourcePackMerger.getLogger().info("   |- File already exists, trying to merge JSON");
-                                    JsonMerger.merge(newFile, file);
+                                    try {
+                                        JsonMerger.merge(newFile, file);
+                                    } catch (Throwable t) {
+                                        System.out.println("Error while merging JSON");
+                                        t.printStackTrace();
+                                    }
                                 } else {
                                     ResourcePackMerger.getLogger().info("   |- File already exists, skipping");
                                 }

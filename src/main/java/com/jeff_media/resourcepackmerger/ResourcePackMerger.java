@@ -6,6 +6,7 @@ import com.jeff_media.resourcepackmerger.gui.GUI;
 import com.jeff_media.resourcepackmerger.logging.ConsoleLogger;
 import com.jeff_media.resourcepackmerger.logging.Logger;
 import com.jeff_media.resourcepackmerger.mergers.DirectoryMerger;
+import com.jeff_media.resourcepackmerger.mergers.McMetaMerger;
 
 import javax.swing.*;
 import java.awt.*;
@@ -51,6 +52,7 @@ public class ResourcePackMerger {
             gui.setIconImages(Utils.getIcons());
 //            gui.setMinimumSize(new Dimension(1800,900));
             gui.setVisible(true);
+            gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             return;
         }
         if (args.length < 2) {

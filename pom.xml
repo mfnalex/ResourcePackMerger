@@ -6,7 +6,7 @@
 
     <groupId>com.jeff_media</groupId>
     <artifactId>ResourcePackMerger</artifactId>
-    <version>1.2.4</version>
+    <version>1.2.7</version>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>

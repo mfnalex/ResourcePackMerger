@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import com.jeff_media.resourcepackmerger.PrettyObjectMapper;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -51,7 +52,7 @@ public class Config {
     }
 
     public void saveFile() throws IOException {
-        String json = new ObjectMapper().writeValueAsString(this);
+        String json = PrettyObjectMapper.get().writeValueAsString(this);
         try(BufferedWriter writer = new BufferedWriter(new FileWriter(getFile(),false))) {
             writer.write(json);
         }

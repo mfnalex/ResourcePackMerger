@@ -1,7 +1,11 @@
 package com.jeff_media.resourcepackmerger.mergers;
 
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jeff_media.resourcepackmerger.PrettyObjectMapper;
+import com.jeff_media.resourcepackmerger.ResourcePackMerger;
 import com.jeff_media.resourcepackmerger.Utils;
 
 import java.io.*;
@@ -34,7 +38,7 @@ public class JsonMerger {
 //    }
 
     private static String convertMapToJson(Map<String,Object> map) throws JsonProcessingException {
-        return new ObjectMapper().writeValueAsString(map);
+        return PrettyObjectMapper.get().writeValueAsString(map);
     }
 
     private static Map<String,Object> mergeMaps(Map<String, Object> oldMap, Map<String, Object> newMap) {
@@ -60,6 +64,12 @@ public class JsonMerger {
     }
 
     private static Map<String, Object> convertJsonToMap(String json) throws JsonProcessingException {
+        try {
             return new ObjectMapper().readValue(json, HashMap.class);
+        } catch (JsonParseException exception) {
+            ResourcePackMerger.getLogger().warn("Failed to parse JSON: " + exception.getMessage());
+            exception.printStackTrace();
+            return new HashMap<>();
+        }
     }
 }
