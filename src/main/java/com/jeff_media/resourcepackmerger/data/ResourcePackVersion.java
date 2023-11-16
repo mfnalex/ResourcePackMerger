@@ -1,5 +1,6 @@
 package com.jeff_media.resourcepackmerger.data;
 
+// https://minecraft.fandom.com/wiki/Pack_format
 public enum ResourcePackVersion {
     MC_1_6(1, "1.6.1", "1.8.9"),
     MC_1_9(2, "1.9", "1.10.2"),
@@ -14,7 +15,8 @@ public enum ResourcePackVersion {
     MC_1_19_3(12, "22w45a", "1.19.3"),
     MC_1_19_4(13, "1.19.4", "1.19.4"),
     MC_1_20_23w14a(14, "23w14a", "23w16a"),
-    MC_1_20(15, "1.20", "1.20");
+    MC_1_20(15, "1.20", "1.20.1"),
+    MC_1_20_2(18, "1.20.2", "1.20.2");
 
     private final int format;
     private final String nameInMenu;
