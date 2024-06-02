@@ -23,16 +23,19 @@ public class AddFileAction implements ActionListener {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileFilter(new ResourcePackFileFilter());
         fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+        fileChooser.setMultiSelectionEnabled(true); // Enable multi-selection mode
         if (gui.lastFile != null && gui.lastFile.exists() && gui.lastFile.isDirectory()) {
             fileChooser.setCurrentDirectory(gui.lastFile);
         }
         int returnValue = fileChooser.showOpenDialog(gui);
         if (returnValue == JFileChooser.APPROVE_OPTION) {
-            File file = fileChooser.getSelectedFile();
-            gui.lastFile = file.getParentFile();
-            gui.listFilesModel.addElement(file);
+            File[] files = fileChooser.getSelectedFiles(); // Get the selected files
+            for (File file : files) {
+                gui.lastFile = file.getParentFile();
+                gui.listFilesModel.addElement(file);
+            }
             gui.updateFileButtons();
-            if (gui.listFiles.getSelectedIndex() == -1) {
+            if (gui.listFiles.getSelectedIndex() == -1 && gui.listFilesModel.getSize() > 0) {
                 gui.listFiles.setSelectedIndex(0);
             }
         }
