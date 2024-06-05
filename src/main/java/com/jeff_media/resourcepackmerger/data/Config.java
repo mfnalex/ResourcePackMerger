@@ -29,17 +29,19 @@ public class Config {
     public final String description;
     public final boolean isNewlyGenerated;
     public final String outputFile;
+    public final String overrideIcon;
     public final List<String> resourcePackFiles;
     public final ResourcePackVersion resourcePackVersion;
     public final ZipCompression compression;
 
-    public Config(String description, String outputFile, List<String> resourcePackFiles, ResourcePackVersion resourcePackVersion, ZipCompression compression) {
+    public Config(String description, String outputFile, List<String> resourcePackFiles, ResourcePackVersion resourcePackVersion, ZipCompression compression, String overrideIcon) {
         this.description = description;
         this.outputFile = outputFile;
         this.resourcePackFiles = resourcePackFiles;
         this.resourcePackVersion = resourcePackVersion;
         this.compression = compression;
         this.isNewlyGenerated = false;
+        this.overrideIcon = overrideIcon;
     }
 
     public Config() {
@@ -49,6 +51,7 @@ public class Config {
         this.resourcePackVersion = ResourcePackVersion.values()[ResourcePackVersion.values().length-1];
         this.compression = ZipCompression.NORMAL;
         this.isNewlyGenerated = true;
+        this.overrideIcon = "";
     }
 
     public void saveFile() throws IOException {
@@ -78,7 +81,7 @@ public class Config {
 
     @Override
     public int hashCode() {
-        return Objects.hash(description, outputFile, resourcePackFiles, resourcePackVersion);
+        return Objects.hash(description, outputFile, resourcePackFiles, resourcePackVersion, overrideIcon);
     }
 
     @Override
@@ -86,7 +89,7 @@ public class Config {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Config config = (Config) o;
-        return Objects.equals(description, config.description) && Objects.equals(outputFile, config.outputFile) && Objects.equals(resourcePackFiles, config.resourcePackFiles) && resourcePackVersion == config.resourcePackVersion;
+        return Objects.equals(description, config.description) && Objects.equals(outputFile, config.outputFile) && Objects.equals(resourcePackFiles, config.resourcePackFiles) && resourcePackVersion == config.resourcePackVersion && Objects.equals(overrideIcon, config.overrideIcon);
     }
 
     public static class ConfigSerializer extends StdSerializer<Config> {
@@ -111,6 +114,7 @@ public class Config {
             jsonGenerator.writeEndArray();
             jsonGenerator.writeNumberField("format", config.resourcePackVersion.getFormat());
             jsonGenerator.writeStringField("compression",config.compression.name());
+            jsonGenerator.writeStringField("overrideIcon",config.overrideIcon);
             jsonGenerator.writeEndObject();
         }
     }
@@ -134,7 +138,8 @@ public class Config {
             node.get("resourcePackFiles").elements().forEachRemaining(element -> resourcePackFiles.add(element.asText()));
             ResourcePackVersion format = ResourcePackVersion.byFormat(node.get("format").asInt());
             ZipCompression compression = ZipCompression.valueOf(node.get("compression").asText());
-            return new Config(description, outputFile, resourcePackFiles, format, compression);
+            String overrideIcon = node.get("overrideIcon").asText();
+            return new Config(description, outputFile, resourcePackFiles, format, compression, overrideIcon);
         }
     }
 

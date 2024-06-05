@@ -22,8 +22,15 @@ import java.util.Collections;
 import java.util.stream.Collectors;
 
 public class GUI extends JFrame {
+
+    public static final String INCEPTION_YEAR = "2022";
+
     final JLabel labelName = new JLabel();
     final JTextField fieldName = new JTextField();
+    final JLabel labelIcon = new JLabel();
+    final JLabel labelIconValue = new JLabel();
+    final JButton buttonIcon = new JButton();
+    final JButton buttonResetIcon = new JButton();
     final JLabel labelFormat = new JLabel();
     final JComboBox<ResourcePackVersion> fieldFormat = new JComboBox<>();
     final JComboBox<ZipCompression> fieldCompression = new JComboBox<>();
@@ -58,9 +65,9 @@ public class GUI extends JFrame {
         Container contentPane = getContentPane();
         contentPane.setLayout(new MigLayout("hidemode 0",
                 // columns
-                "[fill]" + "[fill]" + "[fill]",
+                "[fill]" + "[fill]" + "[fill][fill]",
                 // rows
-                "[]" + "[]" + "[]" + "[]" + "[]" + "[]" + "[]"));
+                "[]" + "[]" + "[]" + "[]" + "[]" + "[]" + "[]" + "[]"));
 
 
         JPanel headerPanel = new JPanel();
@@ -78,7 +85,7 @@ public class GUI extends JFrame {
         height2++;
         headerPanel.add(new JLabel("Resource Pack Merger v" + ResourcePackMerger.getVersion()), "cell 1 " + height2 + " 1 1");
         height2++;
-        headerPanel.add(new JLabel("Copyright " + Calendar.getInstance().get(Calendar.YEAR) + " JEFF Media GbR / mfnalex"), "cell 1 " + height2 + " 1 1");
+        headerPanel.add(new JLabel("Copyright " + INCEPTION_YEAR + " JEFF Media GbR / mfnalex"), "cell 1 " + height2 + " 1 1");
         height2++;
         headerPanel.add(buttonAbout, "cell 1 " + height2 + " 1 1");
         contentPane.add(headerPanel, "cell 0 " + height + " 3 1");
@@ -87,7 +94,7 @@ public class GUI extends JFrame {
                 JFrame frame = new JFrame("About ResourcePackMerger");
                 frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 frame.setLocationByPlatform(true);
-                frame.add(new JLabel(new Replacer().put("$version", Utils.getVersion()).put("$year", String.valueOf(Calendar.getInstance().get(Calendar.YEAR))).apply("<HTML>ResourcePackMerger $version<BR>Copyright $year Alexander Maja (mfnalex) / JEFF Media GbR<BR><BR>GitHub: <a href=\"https://github.com/JEFF-Media-GbR/ResourcePackMerger\">https://github.com/JEFF-Media-GbR/ResourcePackMerger</a><BR>Discord: <a href=\"https://discord.jeff-media.com\">https://discord.jeff-media.com</a><br>Donate: <a href=\"https://paypal.me/mfnalex\">https://paypal.me/mfnalex</a></HTML>")));
+                frame.add(new JLabel(new Replacer().put("$version", Utils.getVersion()).put("$year", INCEPTION_YEAR).apply("<HTML>ResourcePackMerger $version<BR>Copyright $year Alexander Maja (mfnalex) / JEFF Media GbR<BR><BR>GitHub: <a href=\"https://github.com/JEFF-Media-GbR/ResourcePackMerger\">https://github.com/JEFF-Media-GbR/ResourcePackMerger</a><BR>Discord: <a href=\"https://discord.jeff-media.com\">https://discord.jeff-media.com</a><br>Donate: <a href=\"https://paypal.me/mfnalex\">https://paypal.me/mfnalex</a></HTML>")));
                 frame.pack();
                 frame.setVisible(true);
             }
@@ -99,14 +106,32 @@ public class GUI extends JFrame {
         contentPane.add(labelName, "cell 0 " + height);
 
         fieldName.setText("My Custom Resource Pack");
-        contentPane.add(fieldName, "cell 1 " + height);
+        contentPane.add(fieldName, "cell 1 " + height + " 2 1");
+        //</editor-fold>
+
+        //<editor-fold desc="Override Icon">
+        height++;
+        labelIcon.setText("Override Icon");
+        contentPane.add(labelIcon, "cell 0 " + height);
+        labelIconValue.setText("No file selected");
+        contentPane.add(labelIconValue, "cell 1 " + height + " 2 1");
+
+        JPanel iconButtonsPanel = new JPanel(new MigLayout("insets 0", "[fill][fill]", ""));
+        buttonIcon.setText("Change");
+        iconButtonsPanel.add(buttonIcon, "cell 0 0");
+        buttonResetIcon.setText("Reset");
+        iconButtonsPanel.add(buttonResetIcon, "cell 1 0");
+        contentPane.add(iconButtonsPanel, "cell 3 " + height);
+
+        buttonIcon.addActionListener(new ChooseIconFileAction(this));
+        buttonResetIcon.addActionListener(e -> labelIconValue.setText("No file selected"));
         //</editor-fold>
 
         //<editor-fold desc="Resource Pack Version">
         height++;
         labelFormat.setText("Resource Pack Format");
         contentPane.add(labelFormat, "cell 0 " + height);
-        contentPane.add(fieldFormat, "cell 1 " + height);
+        contentPane.add(fieldFormat, "cell 1 " + height + " 2 1");
 
         Arrays.stream(ResourcePackVersion.values()).forEachOrdered(version -> fieldFormat.addItem(version));
         fieldFormat.setRenderer(new ResourcePackVersionListRenderer());
@@ -118,9 +143,12 @@ public class GUI extends JFrame {
         labelOutputFile.setText("Output file");
         contentPane.add(labelOutputFile, "cell 0 " + height);
         labelOutputFileValue.setText(new File("merged-resourcepack.zip").getAbsolutePath());
-        contentPane.add(labelOutputFileValue, "cell 1 " + height);
+        contentPane.add(labelOutputFileValue, "cell 1 " + height + " 2 1");
+
+        JPanel outputFileButtonsPanel = new JPanel(new MigLayout("insets 0", "[fill][fill]", ""));
         buttonOutputFile.setText("Change");
-        contentPane.add(buttonOutputFile, "cell 2 " + height);
+        outputFileButtonsPanel.add(buttonOutputFile, "cell 0 0");
+        contentPane.add(outputFileButtonsPanel, "cell 3 " + height);
 
         buttonOutputFile.addActionListener(new ChooseOutputFileAction(this));
         //</editor-fold>
@@ -131,7 +159,7 @@ public class GUI extends JFrame {
         contentPane.add(labelFiles, "cell 0 " + height);
         scrollPanelListFiles.setViewportView(listFiles);
         scrollPanelListFiles.setMinimumSize(new Dimension(500, 200));
-        contentPane.add(scrollPanelListFiles, "cell 1 " + height);
+        contentPane.add(scrollPanelListFiles, "cell 1 " + height + " 2 1");
 
         fileButtons.setLayout(new MigLayout("hidemode 3",
                 // columns
@@ -154,7 +182,7 @@ public class GUI extends JFrame {
         buttonDeleteFile.setEnabled(false);
         fileButtons.add(buttonDeleteFile, "cell 0 3");
 
-        contentPane.add(fileButtons, "cell 2 " + height);
+        contentPane.add(fileButtons, "cell 3 " + height);
 
         buttonAddFile.addActionListener(new AddFileAction(this));
         listFiles.addListSelectionListener(__ -> updateFileButtons());
@@ -169,7 +197,7 @@ public class GUI extends JFrame {
         //<editor-fold desc="Compression">
         height++;
         contentPane.add(new JLabel("ZIP Compression"), "cell 0 " + height);
-        contentPane.add(fieldCompression, "cell 1 " + height);
+        contentPane.add(fieldCompression, "cell 1 " + height + " 2 1");
 
         fieldCompression.setRenderer(new CompressionLevelListRenderer());
         Arrays.stream(ZipCompression.values()).forEachOrdered(level -> fieldCompression.addItem(level));
@@ -179,7 +207,7 @@ public class GUI extends JFrame {
         height++;
         log.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
         scrollPaneLog.setViewportView(log);
-        contentPane.add(scrollPaneLog, "cell 0 " + height + " 3 1,hmin 150");
+        contentPane.add(scrollPaneLog, "cell 0 " + height + " 4 1,hmin 150");
 
         ResourcePackMerger.getLogger().info("Waiting for input. Add at least one resource pack, then click on \"Start\".");
         ResourcePackMerger.getLogger().info("JSON files will automatically be merged when two or more resource packs contain conflicting files.");
@@ -188,7 +216,7 @@ public class GUI extends JFrame {
 
         //<editor-fold desc="Progress bar">
         height++;
-        contentPane.add(progressBar, "cell 0 " + height + " 3 1");
+        contentPane.add(progressBar, "cell 0 " + height + " 4 1");
 
         progressBar.setIndeterminate(false);
         //</editor-fold>
@@ -196,7 +224,7 @@ public class GUI extends JFrame {
         //<editor-fold desc="Start Button">
         height++;
         buttonStart.setText("Start");
-        contentPane.add(buttonStart, "cell 0 " + height + " 3 1");
+        contentPane.add(buttonStart, "cell 0 " + height + " 4 1");
 
         buttonStart.addActionListener(new StartButtonAction(this));
         //</editor-fold>
@@ -229,6 +257,7 @@ public class GUI extends JFrame {
             }
         });
         labelOutputFileValue.setText(config.outputFile);
+        labelIconValue.setText(config.overrideIcon != null ? config.overrideIcon : "No file selected");
     }
 
     void updateFileButtons() {
@@ -260,9 +289,38 @@ public class GUI extends JFrame {
 
     public void saveConfig() {
         try {
-            new Config(fieldName.getText(), labelOutputFileValue.getText(), Collections.list(listFilesModel.elements()).stream().map(file -> file.getAbsolutePath()).collect(Collectors.toList()), (ResourcePackVersion) fieldFormat.getSelectedItem(), (ZipCompression) fieldCompression.getSelectedItem()).saveFile();
+            new Config(fieldName.getText(), labelOutputFileValue.getText(), Collections.list(listFilesModel.elements()).stream().map(file -> file.getAbsolutePath()).collect(Collectors.toList()), (ResourcePackVersion) fieldFormat.getSelectedItem(), (ZipCompression) fieldCompression.getSelectedItem(), labelIconValue.getText().equals("No file selected") ? null : labelIconValue.getText()).saveFile();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private class ChooseIconFileAction extends AbstractAction {
+        private final GUI parent;
+
+        ChooseIconFileAction(GUI parent) {
+            this.parent = parent;
+        }
+
+        @Override
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setFileFilter(new javax.swing.filechooser.FileFilter() {
+                @Override
+                public boolean accept(File f) {
+                    return f.isDirectory() || f.getName().toLowerCase().endsWith(".png");
+                }
+
+                @Override
+                public String getDescription() {
+                    return "PNG files";
+                }
+            });
+            int returnValue = fileChooser.showOpenDialog(parent);
+            if (returnValue == JFileChooser.APPROVE_OPTION) {
+                File selectedFile = fileChooser.getSelectedFile();
+                labelIconValue.setText(selectedFile.getAbsolutePath());
+            }
         }
     }
 }

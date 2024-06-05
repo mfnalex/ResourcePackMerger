@@ -5,4 +5,5 @@ public interface Logger {
     void debug(String text);
     void error(String text);
     void warn(String text);
+    void error(String text, Throwable t);
 }

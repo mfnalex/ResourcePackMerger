@@ -26,4 +26,9 @@ public class ConsoleLogger implements Logger {
     public void warn(String text) {
         logger.warn(text);
     }
+
+    @Override
+    public void error(String text, Throwable t) {
+        logger.error(text, t);
+    }
 }

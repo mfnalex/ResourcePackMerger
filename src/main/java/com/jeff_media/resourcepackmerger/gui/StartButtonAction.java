@@ -3,6 +3,7 @@ package com.jeff_media.resourcepackmerger.gui;
 import com.jeff_media.resourcepackmerger.ResourcePackMerger;
 import com.jeff_media.resourcepackmerger.Utils;
 import com.jeff_media.resourcepackmerger.data.ZipCompression;
+import com.jeff_media.resourcepackmerger.mergers.IconOverride;
 import com.jeff_media.resourcepackmerger.mergers.McMetaMerger;
 
 import javax.swing.*;
@@ -31,6 +32,11 @@ public class StartButtonAction implements ActionListener {
         File zipFile = zipFilePath.toFile();
         String zipFilePathName = zipFile.getAbsolutePath();
         File tempFolder = Utils.getTempFolder();
+
+        if(gui.listFiles.getModel().getSize() == 0) {
+            ResourcePackMerger.getLogger().error("Please add at least one resource pack file.");
+            return;
+        }
 
 
         boolean deleteOld = false;
@@ -75,6 +81,12 @@ public class StartButtonAction implements ActionListener {
                     ResourcePackMerger.getLogger().info("Adjusting pack.mcmeta file");
                     McMetaMerger.apply(mcMetaFile, gui.fieldName.getText(), gui.fieldFormat.getItemAt(gui.fieldFormat.getSelectedIndex()));
                 }
+
+                if(!gui.labelIconValue.getText().isEmpty()) {
+                    ResourcePackMerger.getLogger().info("Applying icon override");
+                    IconOverride.apply(gui.labelIconValue.getText(), tempFolder);
+                }
+
             } catch (Throwable t) {
                 ResourcePackMerger.getLogger().error(t.getMessage());
                 return;

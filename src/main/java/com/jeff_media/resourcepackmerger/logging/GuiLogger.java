@@ -16,10 +16,18 @@ public class GuiLogger implements Logger {
     }
 
     private void log(String level, String text) {
+        log(level, text, null);
+    }
+
+    private void log(String level, String text, Throwable t) {
         Date date = new Date();
         String message = String.format("[%s] [%s] %s%s", SIMPLE_DATE_FORMAT.format(date), level, text, System.lineSeparator());
         area.append(message);
         area.setCaretPosition(area.getText().length());
+
+        if(t != null) {
+            log(level, t.getMessage());
+        }
     }
 
 
@@ -45,5 +53,11 @@ public class GuiLogger implements Logger {
     public void warn(String text) {
         log("WARN", text);
         LOGGER.warn(text);
+    }
+
+    @Override
+    public void error(String text, Throwable t) {
+        log("ERROR", text);
+        LOGGER.error(text, t);
     }
 }
