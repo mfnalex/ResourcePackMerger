@@ -82,7 +82,7 @@ public class StartButtonAction implements ActionListener {
                     McMetaMerger.apply(mcMetaFile, gui.fieldName.getText(), gui.fieldFormat.getItemAt(gui.fieldFormat.getSelectedIndex()));
                 }
 
-                if(!gui.labelIconValue.getText().isEmpty()) {
+                if(!gui.labelIconValue.getText().isEmpty() && !gui.labelIconValue.getText().equals(GUI.NO_FILE_SELECTED)) {
                     ResourcePackMerger.getLogger().info("Applying icon override");
                     IconOverride.apply(gui.labelIconValue.getText(), tempFolder);
                 }

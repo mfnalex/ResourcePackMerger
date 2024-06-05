@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.jeff_media.resourcepackmerger.PrettyObjectMapper;
+import com.jeff_media.resourcepackmerger.gui.GUI;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -138,7 +139,15 @@ public class Config {
             node.get("resourcePackFiles").elements().forEachRemaining(element -> resourcePackFiles.add(element.asText()));
             ResourcePackVersion format = ResourcePackVersion.byFormat(node.get("format").asInt());
             ZipCompression compression = ZipCompression.valueOf(node.get("compression").asText());
-            String overrideIcon = node.get("overrideIcon").asText();
+            String overrideIcon = GUI.NO_FILE_SELECTED;
+            try {
+                String text = node.get("overrideIcon").asText();
+                if(!text.equals("null")) {
+                    overrideIcon = text;
+                }
+            } catch (Exception ignored) {
+
+            }
             return new Config(description, outputFile, resourcePackFiles, format, compression, overrideIcon);
         }
     }

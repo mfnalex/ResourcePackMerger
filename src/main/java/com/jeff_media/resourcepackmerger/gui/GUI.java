@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 public class GUI extends JFrame {
 
     public static final String INCEPTION_YEAR = "2022";
+    public static final String NO_FILE_SELECTED = "No file selected";
 
     final JLabel labelName = new JLabel();
     final JTextField fieldName = new JTextField();
@@ -113,7 +114,7 @@ public class GUI extends JFrame {
         height++;
         labelIcon.setText("Override Icon");
         contentPane.add(labelIcon, "cell 0 " + height);
-        labelIconValue.setText("No file selected");
+        labelIconValue.setText(NO_FILE_SELECTED);
         contentPane.add(labelIconValue, "cell 1 " + height + " 2 1");
 
         JPanel iconButtonsPanel = new JPanel(new MigLayout("insets 0", "[fill][fill]", ""));

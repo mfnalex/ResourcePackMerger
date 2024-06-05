@@ -1,6 +1,7 @@
 package com.jeff_media.resourcepackmerger.mergers;
 
 import com.jeff_media.resourcepackmerger.ResourcePackMerger;
+import com.jeff_media.resourcepackmerger.gui.GUI;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -8,7 +9,7 @@ import java.io.File;
 public class IconOverride {
 
     public static void apply(String iconPath, File targetFolder) {
-        if(iconPath == null || iconPath.isEmpty()) return;
+        if(iconPath == null || iconPath.isEmpty() || iconPath.equals(GUI.NO_FILE_SELECTED)) return;
 
         File icon = new File(iconPath);
         if(!icon.exists()) {
