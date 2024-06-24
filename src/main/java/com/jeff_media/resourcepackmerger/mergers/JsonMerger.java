@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -43,6 +44,8 @@ public class JsonMerger {
         return PrettyObjectMapper.get().writeValueAsString(map);
     }
 
+    private static final HashSet<String> MERGEABLE_ARRAY_KEYS = new HashSet<String>(List.of("overrides", "sources", "supported_formats"));
+
     private static Map<String,Object> mergeMaps(Map<String, Object> oldMap, Map<String, Object> newMap) {
         Map<String,Object> map = new HashMap<>(newMap);
         for(Map.Entry<String,Object> entry : oldMap.entrySet()) {
@@ -52,7 +55,7 @@ public class JsonMerger {
                 if(entry.getValue() instanceof Map && newMap.get(entry.getKey()) instanceof Map) {
                     map.put(entry.getKey(), mergeMaps((Map<String, Object>) oldMap.get(entry.getKey()), (Map<String, Object>) newMap.get(entry.getKey())));
                 } 
-                else if (newMap.get(entry.getKey()) instanceof ArrayList){
+                else if (newMap.get(entry.getKey()) instanceof ArrayList && MERGEABLE_ARRAY_KEYS.contains(entry.getKey())){
                     ArrayList arr = new ArrayList((ArrayList) newMap.get(entry.getKey()));
                     if (entry.getValue() instanceof ArrayList) {
                         arr.addAll((ArrayList) entry.getValue());
@@ -60,7 +63,7 @@ public class JsonMerger {
                         arr.add(entry.getValue());
                     }
                     map.put(entry.getKey(), arr);
-                } else if(entry.getValue() instanceof ArrayList){
+                } else if(entry.getValue() instanceof ArrayList && MERGEABLE_ARRAY_KEYS.contains(entry.getKey())){
                     ArrayList arr = new ArrayList((ArrayList) entry.getValue());
                     arr.add(newMap.get(entry.getKey()));
                     map.put(entry.getKey(), arr);
