@@ -67,8 +67,8 @@ public class JsonMerger {
                     ArrayList arr = new ArrayList((ArrayList) entry.getValue());
                     arr.add(newMap.get(entry.getKey()));
                     map.put(entry.getKey(), arr);
-                } else if(entry.getKey().equals("pack_format")){
-                    map.put(entry.getKey(), new ArrayList(List.of(newMap.get(entry.getKey()), entry.getValue()))); //gets replaced elsewhere but why not
+                } else if(entry.getKey().equals("supported_formats")){
+                    map.put(entry.getKey(), new ArrayList(List.of(newMap.get(entry.getKey()), entry.getValue())));
                 } else if(entry.getValue() instanceof String && newMap.get(entry.getKey()) instanceof String){
                     String strOld = (String) entry.getValue();
                     String strNew = (String) newMap.get(entry.getKey());
