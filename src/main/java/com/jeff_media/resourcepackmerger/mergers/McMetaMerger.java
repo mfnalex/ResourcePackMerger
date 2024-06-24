@@ -6,6 +6,8 @@ import com.jeff_media.resourcepackmerger.data.ResourcePackVersion;
 
 import java.io.*;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.Map;
 
 public class McMetaMerger {
@@ -23,6 +25,12 @@ public class McMetaMerger {
             }
             pack.put("description", description);
             pack.put("pack_format", version.getFormat());
+            LinkedHashSet supportedFormats = new LinkedHashSet();
+            if (pack.containsKey("supported_formats")) {
+                supportedFormats.addAll((ArrayList) pack.get("supported_formats"));
+            }
+            supportedFormats.add(version.getFormat());
+            pack.put("supported_formats", new ArrayList(supportedFormats));
             map.put("pack", pack);
             String json = PrettyObjectMapper.get().writeValueAsString(map);
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
