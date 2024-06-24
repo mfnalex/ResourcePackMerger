@@ -14,9 +14,11 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.OpenOption;
 import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -48,7 +50,38 @@ public class JsonMerger {
                 map.put(entry.getKey(), entry.getValue());
             } else {
                 if(entry.getValue() instanceof Map && newMap.get(entry.getKey()) instanceof Map) {
-                    newMap.put(entry.getKey(), mergeMaps((Map<String, Object>) oldMap.get(entry.getKey()), (Map<String, Object>) newMap.get(entry.getKey())));
+                    map.put(entry.getKey(), mergeMaps((Map<String, Object>) oldMap.get(entry.getKey()), (Map<String, Object>) newMap.get(entry.getKey())));
+                } 
+                else if (newMap.get(entry.getKey()) instanceof ArrayList){
+                    ArrayList arr = new ArrayList((ArrayList) newMap.get(entry.getKey()));
+                    if (entry.getValue() instanceof ArrayList) {
+                        arr.addAll((ArrayList) entry.getValue());
+                    } else {
+                        arr.add(entry.getValue());
+                    }
+                    map.put(entry.getKey(), arr);
+                } else if(entry.getValue() instanceof ArrayList){
+                    ArrayList arr = new ArrayList((ArrayList) entry.getValue());
+                    arr.add(newMap.get(entry.getKey()));
+                    map.put(entry.getKey(), arr);
+                } else if(entry.getKey().equals("pack_format")){
+                    map.put(entry.getKey(), new ArrayList(List.of(newMap.get(entry.getKey()), entry.getValue()))); //gets replaced elsewhere but why not
+                } else if(entry.getValue() instanceof String && newMap.get(entry.getKey()) instanceof String){
+                    String strOld = (String) entry.getValue();
+                    String strNew = (String) newMap.get(entry.getKey());
+                    if(strOld.equals(strNew)){
+                        ;
+                    } else if(strOld.replace("minecraft:", "").equals(strNew.replace("minecraft:", ""))){
+                        ; /* kind of hacky and not quite correct, but to address and properly ignore differences like:
+                          "parent" : "minecraft:block/structure_block"
+                        versus
+                          "parent" : "block/structure_block", */ 
+                    } else {
+                        ResourcePackMerger.getLogger().info(String.format("     !Warn: Unsure how to merge key %s\n       preferring %s over %s based on pack order", 
+                                                            entry.getKey(), strOld, strNew));
+                    }
+                } else {
+                    ResourcePackMerger.getLogger().info(String.format("     !Warn: Unsure how to merge key %s", entry.getKey()));
                 }
             }
         }
